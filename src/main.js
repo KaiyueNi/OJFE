@@ -18,9 +18,15 @@ Vue.use(ElementUI)
 
 Vue.use(VueCodeMirror,VueHighlightJS)
 
+//设置baseURL
+// Axios.defaults.baseURL = 'http://47.101.167.9:5000';
+
+//设置token值    
+// Axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+
 //请求头
-Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; 
-// Axios.defaults.headers.post['Content-Type'] = 'application/json'; 
+// Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; 
+Axios.defaults.headers.post['Content-Type'] = 'application/json'; 
 
 //post请求时对data进行数据转换
 Axios.interceptors.request.use((req) => {

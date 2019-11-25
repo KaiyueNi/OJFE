@@ -5,6 +5,9 @@ import Home from '@/components/home'
 import AList from '@/components/pages/Annoncement/AList'
 import EList from '@/components/pages/Exercises/EList'
 import EContent from '@/components/pages/Exercises/EContent'
+import CAList from '@/components/pages/Competition/CAList'
+import CList from '@/components/pages/Competition/CList'
+import CContent from '@/components/pages/Competition/CContent'
 
 
 
@@ -33,6 +36,23 @@ export default new Router({
       path:'/EContent',
       name:'EContent',
       component:EContent
+    },
+    {
+      path:'/CAList',
+      name:'CAList',
+      component:CAList
+    },
+    {
+      path:'/CList',
+      name:'CList',
+      component:CList
+
+    },
+    {
+      path:'/CContent',
+      name:'CContent',
+      component:CContent
+
     }
   ]
 })

@@ -10,8 +10,9 @@
           <el-menu-item index="1" style="height:70px;margin:0 10px;margin-left:100px;"><router-link to="/">Home</router-link></el-menu-item>
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
-          <el-menu-item index="4" style="height:70px;margin:0 10px;"><router-link to="/nav">Community</router-link></el-menu-item>
-          <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/nav">Settings</router-link></el-menu-item>
+          <el-menu-item index="4" style="height:70px;margin:0 10px;"><router-link to="/CAList">Competition</router-link></el-menu-item>
+          <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/">Community</router-link></el-menu-item>
+          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/">Settings</router-link></el-menu-item>
      </el-menu>
     </el-col>
      <el-col :span="2">

@@ -43,24 +43,7 @@
 </div>
 
 
- <transition name="fade" appear>
-    <div class="modal-overlay" 
-         v-if="showModal" 
-         @click="showModal = false"></div>
-</transition>
-  <transition name="pop" appear>
-    <div class="modal" 
-         role="dialog" 
-         v-if="showModal"
-         >
-      <h3>公告内容</h3>
 
-      <h5>这里显示公告的具体内容,我也不知道要写些什么，这里显示公告的具体内容,我也不知道要写些什么，这里显示公告的具体内容,我也不知道要写些什么</h5>
-
-    <el-button type="primary" @click="showModal = false" style="margin-bottom:1em;">确认</el-button>
-
-    </div>
-  </transition>
 
 
 
@@ -86,35 +69,35 @@
           },
           {
             id:1,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:2,
-            content:'点击公告文字可以查看公告详情...',
+            content:'点击比赛可以进入比赛详情...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:3,
-            content:'公告和比赛在这里发布...',
+            content:'比赛在这里发布...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:4,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:5,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
@@ -128,70 +111,63 @@
           },
           {
             id:7,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:8,
-            content:'点击公告文字可以查看公告详情...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:9,
-            content:'公告和比赛在这里发布...',
+            content:'比赛在这里发布...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:10,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
           },
           {
             id:11,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
             per:'发布人'
 
           }
         ],
-        showModal: false,
-        activeIndex: '2',
+        activeIndex: '4',
         note:{
-          backgroundImage: "url(" + require("../../../../static/img/blog2.jpg") + ")",
+          backgroundImage: "url(" + require("../../../../static/img/banner.jpg") + ")",
         }
     
       };
     },
     mounted(){
-       //列表
-      this.$axios({
-      method: 'get',
-      url: "/api/Announcement/", 
-      responseType: 'json'// 返回数据为json
-    })
-      .then(response => {
-        console.log(response.data, "success");   // 成功的返回      
-      })
-      .catch(error => console.log(error, "error")); // 失败的返回
 
     },
-
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
     getContent(key){
         console.log(key);
-        this.centerDialogVisible = true;
-        this.showModal = true;
+        this.$router.push({
+          path: '/CList',
+          query: {
+            key
+          }
+        })
+      ist
 
       }
     }
@@ -211,7 +187,7 @@
   #coverbg{
     width: 100%;
     height: 100%;
-    background-color:rgba(31,32,35,0.8);
+    // background-color:rgba(31,32,35,0.8);
 
   }
   .el-menu{

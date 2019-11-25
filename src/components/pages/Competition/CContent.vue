@@ -147,7 +147,7 @@ require('codemirror/addon/fold/comment-fold.js')
           extraKeys: {'Ctrl': 'autocomplete'}
       },
     
-        activeIndex: '3',
+        activeIndex: '4',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/banner.jpg") + ")",
         }

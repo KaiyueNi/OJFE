@@ -6,7 +6,7 @@
 <div class="centerWidth" style="padding-top:35px;">
   <el-row>
      <el-col :span="22">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
           <el-menu-item index="1" style="height:70px;margin:0 10px;margin-left:100px;"><router-link to="/">Home</router-link></el-menu-item>
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
@@ -90,7 +90,7 @@
         <el-button
           size="mini"
           type="primary"
-          @click="handleSelect(props.$index, props.row)">解题</el-button>
+          @click="handleExercise(props.$index, props.row)">解题</el-button>
       </template>
     </el-table-column>
       
@@ -188,7 +188,7 @@
 
         }
         ],
-        activeIndex: '3',
+        activeIndex: '4',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/intro4.jpg") + ")",
         }
@@ -210,10 +210,10 @@
         return 'background-color: rgba(227,227,227);color:black;font-weight: 600;height:60px;font-size;20px;'
       }
     },
-    handleSelect(key, keyPath) {
+    handleExercise(key, keyPath) {
         console.log(key, keyPath);
         this.$router.push({
-          path: '/EContent',
+          path: '/CContent',
           query: {
             key
           }
