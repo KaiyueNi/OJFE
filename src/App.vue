@@ -30,4 +30,10 @@ ul{
   color: black;
   font-weight: 800;
 }
+ .el-pagination__total{
+    color: white;
+  }
+  .el-pagination__jump{
+    color: white;
+  }
 </style>

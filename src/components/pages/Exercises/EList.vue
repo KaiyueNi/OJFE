@@ -27,7 +27,7 @@
     :data="tableData"
     :row-style="tableRowStyle"
     :header-cell-style="tableHeaderColor"
-    :cell-mouse-enter="handleMouseEnter"
+      height="460"
     >
     <el-table-column type="expand">
       <template slot-scope="props">
@@ -86,10 +86,6 @@
 
         <el-table-column label="操作">
       <template slot-scope="props">
-        <!-- <el-button
-          size="mini"          
-          type="primary"
-          @click="handleEdit(props.$index, props.row)">查看题解</el-button> -->
         <el-button
           size="mini"
           type="primary"
@@ -102,7 +98,21 @@
       
   </div>
 
+    <div class="block">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400">
+    </el-pagination>
+  </div>
+
 </div>
+
+
 
 
 </div>
@@ -117,6 +127,7 @@
     },
     data() {
       return {
+         currentPage: 4,
            tableData: [
           {
           id: '12987122',
@@ -183,7 +194,7 @@
         ],
         activeIndex: '3',
         note:{
-          backgroundImage: "url(" + require("../../../../static/img/homebg.jpg") + ")",
+          backgroundImage: "url(" + require("../../../../static/img/intro4.jpg") + ")",
         }
     
       };
@@ -197,7 +208,7 @@
       },
        // 修改table tr行的背景色
     tableRowStyle({ row, rowIndex }) {
-      return 'background-color:transparent;height:80px;color:black;cursor: pointer;font-size:20px;}'
+      return 'background-color:rgba(255,255,255,0.3);height:80px;color:black;cursor: pointer;font-size:18px;}'
     },
     // 修改table header的背景色
     tableHeaderColor({ row, column, rowIndex, columnIndex }) {
@@ -205,7 +216,7 @@
         return 'background-color: rgba(227,227,227);color:black;font-weight: 600;height:60px;font-size;20px;'
       }
     },
-       handleSelect(key, keyPath) {
+    handleSelect(key, keyPath) {
         console.log(key, keyPath);
         this.$router.push({
           path: '/EContent',
@@ -213,6 +224,12 @@
             key
           }
         })
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
       }
 
     }
@@ -236,7 +253,7 @@
   #coverbg{
     width: 100%;
     height: 100%;
-    // background-color:rgba(31,32,35,0.8);
+    // background-color:rgba(65,66,70,0.5);
 
   }
   .el-menu{
@@ -249,20 +266,24 @@
     background-color: transparent;
     color: #2f2d2e;
     color: black;
+    color: #fff;
+
 
 
   }
   .el-menu--horizontal>.el-menu-item.is-active{
     color: black;
-
+    color: #fff;
     background-color: transparent;
-       font-size: 18px;
+    font-size: 18px;
 
 
   }
   .el-menu--horizontal>.el-menu-item{
     color: #2f2d2e;
     font-weight: 600;
+    color: #c1c1c1;
+
 
 
   }
@@ -279,20 +300,20 @@
    .listcontent{
        width: 100%;
        position: absolute;
-       top:120px;
-       bottom: 7em;
+       top:150px;
+       bottom: 3em;
        left: 0;
        right: 0;
-       display: flex;
-       flex-direction: column;
-       justify-content: center;
+      //  display: flex;
+      //  flex-direction: column;
+      //  justify-content: center;
        padding: 0 13em;
        box-sizing: border-box;
-         overflow-y:scroll;
-       &::-webkit-scrollbar {display:none}
+      //    overflow-y:scroll;
+      //  &::-webkit-scrollbar {display:none}
        .tableli{
          position: relative;
-         height: 90%;
+         height: 500px;
           .el-table__body tr.hover-row>td{
           background-color: #212e3e !important;
           }
@@ -317,7 +338,14 @@
 .el-table--enable-row-hover .el-table__body tr:hover>td{
 background-color: #212e3e !important;
 }
+.block{
 
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+ 
+
+}
 
 
 
