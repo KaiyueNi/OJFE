@@ -30,10 +30,15 @@ ul{
   color: black;
   font-weight: 800;
 }
- .el-pagination__total{
+.el-pagination__total{
     color: white;
-  }
-  .el-pagination__jump{
+}
+.el-pagination__jump{
     color: white;
-  }
+}
+.CodeMirror {
+border: 1px solid #eee;
+height:350px!important;
+margin-top: 20px;
+}
 </style>

@@ -24,9 +24,9 @@
           <ul class="list">
             <li v-for="item in list" :key="item.id">
               <i class="el-icon-s-flag"></i>
-              <p @click="getContent(item.id)">{{item.content}}</p>
-              <p>{{item.time}}</p>
-              <p>{{item.per}}</p>
+              <p @click="getContent(item.id)">{{item.title}}</p>
+              <!-- <p>{{item.time}}</p> -->
+              <p>{{item.author}}</p>
               
             </li>
 
@@ -79,86 +79,86 @@
         list:[
           {
             id:0,
-            content:'欢迎使用OnlineJudge...',
+            title:'欢迎使用OnlineJudge...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:1,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:2,
-            content:'点击公告文字可以查看公告详情...',
+            title:'点击公告文字可以查看公告详情...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:3,
-            content:'公告和比赛在这里发布...',
+            title:'公告和比赛在这里发布...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:4,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:5,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
         {
             id:6,
-            content:'欢迎使用OnlineJudge...',
+            title:'欢迎使用OnlineJudge...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:7,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:8,
-            content:'点击公告文字可以查看公告详情...',
+            title:'点击公告文字可以查看公告详情...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:9,
-            content:'公告和比赛在这里发布...',
+            title:'公告和比赛在这里发布...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:10,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           },
           {
             id:11,
-            content:'在这里显示公告的内容，内容超出部分用省略号显示...',
+            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
             time:'2019-11-21',
-            per:'发布人'
+            author:'发布人'
 
           }
         ],
@@ -178,7 +178,8 @@
       responseType: 'json'// 返回数据为json
     })
       .then(response => {
-        console.log(response.data, "success");   // 成功的返回      
+        console.log(response.data.data);
+        // this.list =  response.data.data; // 成功的返回      
       })
       .catch(error => console.log(error, "error")); // 失败的返回
 

@@ -36,24 +36,37 @@
             <p>描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
             <p class="weight">示例：</p>
             <p>输入: 120 输出: 21</p>
-
         </div>
-      
 
     </div>
     <div class="answer">
         <div class="select">
-            <el-dropdown>
+          <p>语言：</p>
+            <el-dropdown @command="handleCommand1">
                 <span class="el-dropdown-link" style="color:black;">
-                    请选择<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>python</el-dropdown-item>
-                    <el-dropdown-item>c</el-dropdown-item>
-                    <el-dropdown-item>c++</el-dropdown-item>
-                    <el-dropdown-item disabled>java</el-dropdown-item>
+                    <el-dropdown-item command="python">python</el-dropdown-item>
+                    <el-dropdown-item command="c">c</el-dropdown-item>
+                    <el-dropdown-item command="c++">c++</el-dropdown-item>
+                    <el-dropdown-item command="java">java</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
+          <p style="margin-left:10px;">主题：</p>
+            <el-dropdown @command="handleCommand2">
+                <span class="el-dropdown-link" style="color:black;">
+                    {{theme}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command = "base16-dark">base16-dark</el-dropdown-item>
+                    <el-dropdown-item command = "base16-light">base16-light</el-dropdown-item>
+                    <el-dropdown-item command = "eclipse">eclipse</el-dropdown-item>
+                    <el-dropdown-item command = "idea">idea</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+
+      
 
         </div>
 
@@ -72,13 +85,9 @@
             <div class="vresult" v-if="result">
                 <p>结果：</p>
                 <p>success</p>
-
                 <el-button type="success"
                 >查看详情</el-button>
-
             </div>
-
-       
 
              <el-button type="danger"
               @click="openFullScreen"
@@ -86,20 +95,9 @@
 
         </div>
 
-
- 
-
-
-
     </div>
 
-       
-
 </div>
-
-
-
-
 
 </div>
 </div>
@@ -109,16 +107,11 @@
 import { codemirror } from 'vue-codemirror'
 import "codemirror/theme/ambiance.css";  // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
 import "codemirror/theme/base16-dark.css";  // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
+import "codemirror/theme/base16-light.css";  // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
 import "codemirror/theme/eclipse.css";  // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
+import "codemirror/theme/idea.css";  // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
 require("codemirror/mode/javascript/javascript") // 这里引入的模式的js，根据设置的mode引入，一定要引入！！
 require("codemirror/mode/python/python.js")
-require('codemirror/addon/fold/foldcode.js')
-require('codemirror/addon/fold/foldgutter.js')
-require('codemirror/addon/fold/brace-fold.js')
-require('codemirror/addon/fold/xml-fold.js')
-require('codemirror/addon/fold/indent-fold.js')
-require('codemirror/addon/fold/markdown-fold.js')
-require('codemirror/addon/fold/comment-fold.js')
 
   export default {
     name:'home',
@@ -128,13 +121,15 @@ require('codemirror/addon/fold/comment-fold.js')
     },
     data() {
       return {
+      language:'python',
+      theme:'base16-dark',
       result:false,
       curCode:'',
       code:'',
       content:'',
       cmOptions:{
           value:'',
-          mode:"javascript",
+          mode:"python",
           theme: "base16-dark",
           tabSize: 2,
           lineNumbers: true,
@@ -163,11 +158,17 @@ require('codemirror/addon/fold/comment-fold.js')
       },
       openFullScreen(){
           this.result=true;
-
-
+      },
+      handleCommand1(command) {
+        // this.cmOptions.theme = command;
+        this.language = command;
+        
+      },
+      handleCommand2(command) {
+        this.cmOptions.theme = command;
+        this.theme = command;
+        
       }
-
-   
   
     }
   }
@@ -233,26 +234,26 @@ require('codemirror/addon/fold/comment-fold.js')
        width: 100%;
        position: absolute;
        top:150px;
-       bottom: 60px;
+       bottom: 40px;
        left: 0;
        right: 0;
        display: flex;
        justify-content: space-around;
-       padding: 0 8em;
+       padding: 0 6em;
        box-sizing: border-box;
-
 }
 
 .question{
     width: 30%;
     height: 100%;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.7);
     border-radius: 5%;
     position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding:1.5%; 
+    padding:1%; 
+    padding-bottom: 40px;
     box-sizing: border-box;
     padding-bottom: 2%;
 
@@ -261,6 +262,7 @@ require('codemirror/addon/fold/comment-fold.js')
         height: 85%;
         border-radius: 3%;
         padding: 10px;
+        padding-top: 0;
         box-sizing: border-box;
         // background-color: #fff;
         overflow-y: scroll;
@@ -270,39 +272,40 @@ require('codemirror/addon/fold/comment-fold.js')
          .weight{
              font-weight: 600;
          }
-
     }
     .title{
         width: 100%;
         height: 13%;
-        margin-bottom: 2%;
+        // margin-bottom: 2%;
         line-height: 30px;
         padding: 10px;
+        padding-bottom: 0;
         p:nth-child(1){
              font-weight: 600;
              font-size: 20px;
              font-family: 'Courier New', Courier, monospace;
-
         }
         p:nth-child(2){
             font-size: 14px;
         }
-
 
     }
 }
 .answer{
     width: 65%;
     height: 100%;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,0.7);
     padding: 20px;
-    padding-top:10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     .select{
         height: 7%;
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        p{
+          font-weight: 600;
+        }
     }
 
     .code{
@@ -329,8 +332,6 @@ require('codemirror/addon/fold/comment-fold.js')
         }
    
     }
-
 }
- 
 
 </style>
