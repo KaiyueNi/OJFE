@@ -41,4 +41,9 @@ border: 1px solid #eee;
 height:350px!important;
 margin-top: 20px;
 }
+.el-table__empty-text{
+  font-size: 20px;
+  color:black;
+
+}
 </style>

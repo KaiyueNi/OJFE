@@ -30,7 +30,7 @@
     :header-cell-style="tableHeaderColor"
       height="460"
     >
-    <el-table-column type="expand">
+    <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
      
@@ -40,7 +40,7 @@
      
         </el-form>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       label="题目ID"
       prop="id">
@@ -51,13 +51,13 @@
     </el-table-column>
     <el-table-column
       label="题目名称"
-      prop="name">
+      prop="title">
     </el-table-column>
     <el-table-column
       label="通过次数/总提交次数">
         <template slot-scope="props">
-        <span style="margin-left: 10px">{{ props.row.desc }}</span>
-        <span>/{{ props.row.per }}</span>
+        <span style="margin-left: 10px">{{ props.row.accepted_number }}</span>
+        <span>/{{ props.row.submission_number }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -67,20 +67,20 @@
           <el-button
           size="mini"
           type="success"
-          v-if="props.row.degree == '简单'"
-         >{{ props.row.degree}}</el-button>
+          v-if="props.row.difficulty == '简单'"
+         >{{ props.row.difficulty}}</el-button>
           
           <el-button
           size="mini"
           type="danger"
-          v-if="props.row.degree == '困难'"
-         >{{ props.row.degree}}</el-button>
+          v-if="props.row.difficulty == '困难'"
+         >{{ props.row.difficulty}}</el-button>
 
           <el-button
           size="mini"
           type="warning"
-          v-if="props.row.degree == '中等'"
-         >{{ props.row.degree}}</el-button>
+          v-if="props.row.difficulty == '中等'"
+         >{{ props.row.difficulty}}</el-button>
 
       </template>
     </el-table-column>
@@ -90,7 +90,7 @@
         <el-button
           size="mini"
           type="primary"
-          @click="handleSelect(props.$index, props.row)">解题</el-button>
+          @click="handleSelect(props.row.problem_id, props.row)">解题</el-button>
       </template>
     </el-table-column>
       
@@ -99,12 +99,15 @@
       
   </div>
 
-    <div class="block">
+  <div class="block">
   <el-pagination
             background
             layout="prev, pager, next"
-            :total="1000">
-          </el-pagination>
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="pagesize" 
+            :total="NumOfProblems">
+  </el-pagination>
   </div>
 
 </div>
@@ -124,70 +127,10 @@
     },
     data() {
       return {
-           tableData: [
-          {
-          id: '12987122',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'简单',
-          per:'45'
-        },
-         {
-          id: '12987123',
-          name: '排序问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'困难',
-          per:'45'
-
-        }, 
-        {
-          id: '12987125',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'中等',
-          per:'45'
-
-        }, 
-        {
-          id: '12987126',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'简单',
-          per:'45'
-
-        },
-         {
-          id: '12987123',
-          name: '排序问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'困难',
-          per:'45'
-
-        }, 
-        {
-          id: '12987125',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'中等',
-          per:'45'
-
-        }, 
-        {
-          id: '12987126',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'简单',
-          per:'45'
-
-        }
-        ],
+          NumOfProblems:1,
+          pagesize:1,
+          currentPage:1,
+          tableData: [],
         activeIndex: '3',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/intro4.jpg") + ")",
@@ -196,6 +139,7 @@
       };
     },
     mounted(){
+      this.handleproblemlist();
 
     },
     methods: {
@@ -211,14 +155,38 @@
       }
     },
     handleSelect(key, keyPath) {
-        console.log(key, keyPath);
         this.$router.push({
           path: '/EContent',
           query: {
             key
           }
         })
-      }
+      },
+      //分页
+      handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage); //点击第几页
+                this.handleproblemlist();
+      },
+      handleproblemlist() {
+        //问题列表
+        this.$axios({
+        method: 'get',
+        url: "/api/Problem/", 
+        params:{
+          NumberOfPages:this.currentPage,
+          DataPerPage:this.pagesize
+        },
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          // console.log(response.data.data);
+          this.NumOfProblems = response.data.data.NumOfProblems;
+          this.tableData =  response.data.data.list; // 成功的返回      
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+          
+     }
   
 
     }

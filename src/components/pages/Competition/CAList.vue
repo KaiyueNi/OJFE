@@ -6,7 +6,7 @@
 <div class="centerWidth" style="padding-top:35px;">
   <el-row>
      <el-col :span="22">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
           <el-menu-item index="1" style="height:70px;margin:0 10px;margin-left:100px;"><router-link to="/">Home</router-link></el-menu-item>
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
@@ -23,10 +23,10 @@
 <div class="listcontent">
           <ul class="list">
             <li v-for="item in list" :key="item.id">
-              <i class="el-icon-s-flag"></i>
-              <p @click="getContent(item.id)">{{item.content}}</p>
-              <p>{{item.time}}</p>
-              <p>{{item.per}}</p>
+              <i class="el-icon-trophy-1"></i>
+              <p @click="getContent(item.id)">{{item.title}}</p>
+              <p>{{item.created_time}}</p>
+              <p>{{item.created_by}}</p>
               
             </li>
 
@@ -36,7 +36,9 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="1000">
+            :current-page="currentPage"
+            :page-size="pagesize" 
+            :total="NumOfProblems">
           </el-pagination>
           </div>
 
@@ -59,92 +61,10 @@
     },
     data() {
       return {
-        list:[
-          {
-            id:0,
-            content:'欢迎使用OnlineJudge...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:1,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:2,
-            content:'点击比赛可以进入比赛详情...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:3,
-            content:'比赛在这里发布...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:4,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:5,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-        {
-            id:6,
-            content:'欢迎使用OnlineJudge...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:7,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:8,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:9,
-            content:'比赛在这里发布...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:10,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          },
-          {
-            id:11,
-            content:'在这里显示比赛的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            per:'发布人'
-
-          }
-        ],
+        NumOfProblems:1,
+        pagesize:1,
+        currentPage:1,
+        list:[],
         activeIndex: '4',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/banner.jpg") + ")",
@@ -153,23 +73,38 @@
       };
     },
     mounted(){
+      this.handlecompetitionlist();
 
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+      getContent(key){
+          console.log(key);
+          this.$router.push({
+            path: '/CList',
+            query: {
+              key
+            }
+          })
       },
-    getContent(key){
-        console.log(key);
-        this.$router.push({
-          path: '/CList',
-          query: {
-            key
-          }
+      handlecompetitionlist() {
+            //比赛列表
+          this.$axios({
+          method: 'get',
+          url: "/api/Contest/", 
+          params:{
+          page_id:this.currentPage,
+          num_page:this.pagesize
+          },
+          responseType: 'json'// 返回数据为json
         })
-      ist
-
-      }
+          .then(response => {
+            console.log(response.data.data);
+            this.NumOfProblems = response.data.data.total_page;
+            this.list =  response.data.data.list; // 成功的返回      
+          })
+          .catch(error => console.log(error, "error")); // 失败的返回
+          
+     }
     }
   }
 </script>
@@ -258,7 +193,7 @@
             color: #fff;
                 p:nth-child(2){
                 margin-left: 20px;
-                width: 65%;
+                width: 50%;
                 letter-spacing: 2px;
                 font-family: 'Montserrat', sans-serif;
                 line-height: 60px;
@@ -266,14 +201,18 @@
                 cursor: pointer;
                 }
                 p:nth-child(3){
+                width: 30%;
+                }
+                p:nth-child(4){
                 width: 20%;
                 }
+              
                 &:hover{
                    background-color:rgba(31,32,35,0.4);
                    font-size: 19px;
                 }
        }
-  .el-icon-s-flag{
+  .el-icon-trophy-1{
     margin-left:20px;
     color:#409EFF;
 

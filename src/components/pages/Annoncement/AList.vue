@@ -31,14 +31,14 @@
             </li>
 
           </ul>
-
+<!-- 
           <div class="page">
           <el-pagination
             background
             layout="prev, pager, next"
             :total="1000">
           </el-pagination>
-          </div>
+          </div> -->
 
 </div>
 
@@ -55,7 +55,7 @@
          >
       <h3>公告内容</h3>
 
-      <h5>这里显示公告的具体内容,我也不知道要写些什么，这里显示公告的具体内容,我也不知道要写些什么，这里显示公告的具体内容,我也不知道要写些什么</h5>
+      <h5>{{acontent}}</h5>
 
     <el-button type="primary" @click="showModal = false" style="margin-bottom:1em;">确认</el-button>
 
@@ -76,90 +76,13 @@
     },
     data() {
       return {
+        acontent:'',
         list:[
           {
             id:0,
             title:'欢迎使用OnlineJudge...',
             time:'2019-11-21',
             author:'发布人'
-
-          },
-          {
-            id:1,
-            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:2,
-            title:'点击公告文字可以查看公告详情...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:3,
-            title:'公告和比赛在这里发布...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:4,
-            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:5,
-            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-        {
-            id:6,
-            title:'欢迎使用OnlineJudge...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:7,
-            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:8,
-            title:'点击公告文字可以查看公告详情...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:9,
-            title:'公告和比赛在这里发布...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:10,
-            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            author:'发布人'
-
-          },
-          {
-            id:11,
-            title:'在这里显示公告的内容，内容超出部分用省略号显示...',
-            time:'2019-11-21',
-            author:'发布人'
-
           }
         ],
         showModal: false,
@@ -171,18 +94,7 @@
       };
     },
     mounted(){
-       //列表
-      this.$axios({
-      method: 'get',
-      url: "/api/Announcement/", 
-      responseType: 'json'// 返回数据为json
-    })
-      .then(response => {
-        console.log(response.data.data);
-        // this.list =  response.data.data; // 成功的返回      
-      })
-      .catch(error => console.log(error, "error")); // 失败的返回
-
+      this.getAlist();
     },
 
     methods: {
@@ -190,9 +102,33 @@
         console.log(key, keyPath);
       },
     getContent(key){
-        console.log(key);
+     
+      //公告详情
+      this.$axios({
+      method: 'get',
+      url: "/api/Announcement/"+key, 
+      responseType: 'json'// 返回数据为json
+    })
+      .then(response => {
+        // console.log(response.data.data);
+        this.acontent = response.data.data[0].content_text;
+      })
+      .catch(error => console.log(error, "error")); // 失败的返回
         this.centerDialogVisible = true;
         this.showModal = true;
+      },
+      getAlist(){
+               //公告列表
+          this.$axios({
+          method: 'get',
+          url: "/api/Announcement/", 
+          responseType: 'json'// 返回数据为json
+        })
+          .then(response => {
+            // console.log(response.data.data);
+            this.list =  response.data.data; // 成功的返回      
+          })
+          .catch(error => console.log(error, "error")); // 失败的返回
 
       }
     }

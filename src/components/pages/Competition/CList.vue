@@ -6,7 +6,7 @@
 <div class="centerWidth" style="padding-top:35px;">
   <el-row>
      <el-col :span="22">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
           <el-menu-item index="1" style="height:70px;margin:0 10px;margin-left:100px;"><router-link to="/">Home</router-link></el-menu-item>
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
@@ -20,9 +20,16 @@
   </el-row>
 </div>
 
-<div class="listcontent">
-  <div class="tableli">
 
+<div class="listcontent">
+  <div class="descriptioncss">
+  <h3>比赛：</h3>
+  <p>{{Cname}}</p>
+  <h3>难度：</h3>
+  <p>{{Cdiff}}</p>
+  </div>
+ 
+  <div class="tableli">
 
     <el-table
     :data="tableData"
@@ -30,17 +37,17 @@
     :header-cell-style="tableHeaderColor"
       height="460"
     >
-    <el-table-column type="expand">
+    <!-- <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
      
           <el-form-item label="题目描述">
-            <span>{{ props.row.category }}</span>
+            <span>{{ props.row.description }}</span>
           </el-form-item>
      
         </el-form>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column
       label="题目ID"
       prop="id">
@@ -51,15 +58,16 @@
     </el-table-column>
     <el-table-column
       label="题目名称"
-      prop="name">
+      prop="title">
     </el-table-column>
-    <el-table-column
+    <!-- <el-table-column
       label="通过次数/总提交次数">
         <template slot-scope="props">
-        <span style="margin-left: 10px">{{ props.row.desc }}</span>
-        <span>/{{ props.row.per }}</span>
+        <span style="margin-left: 10px">{{ props.row.accepted_number }}</span>
+        <span>/{{ props.row.submission_number }}</span>
       </template>
-    </el-table-column>
+    </el-table-column> -->
+<!--    
     <el-table-column
       label="难度">
         <template slot-scope="props">
@@ -67,30 +75,30 @@
           <el-button
           size="mini"
           type="success"
-          v-if="props.row.degree == '简单'"
-         >{{ props.row.degree}}</el-button>
+          v-if="props.row.difficulty == '简单'"
+         >{{ props.row.difficulty}}</el-button>
           
           <el-button
           size="mini"
           type="danger"
-          v-if="props.row.degree == '困难'"
-         >{{ props.row.degree}}</el-button>
+          v-if="props.row.difficulty == '困难'"
+         >{{ props.row.difficulty}}</el-button>
 
           <el-button
           size="mini"
           type="warning"
-          v-if="props.row.degree == '中等'"
-         >{{ props.row.degree}}</el-button>
+          v-if="props.row.difficulty == '中等'"
+         >{{ props.row.difficulty}}</el-button>
 
       </template>
-    </el-table-column>
+    </el-table-column> -->
 
         <el-table-column label="操作">
       <template slot-scope="props">
         <el-button
           size="mini"
           type="primary"
-          @click="handleExercise(props.$index, props.row)">解题</el-button>
+          @click="handleSelect(props.row.problem_id, props.row)">解题</el-button>
       </template>
     </el-table-column>
       
@@ -99,13 +107,16 @@
       
   </div>
 
-    <div class="block">
+  <!-- <div class="block">
   <el-pagination
             background
             layout="prev, pager, next"
-            :total="1000">
-          </el-pagination>
-  </div>
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="pagesize" 
+            :total="NumOfProblems">
+  </el-pagination>
+  </div> -->
 
 </div>
 
@@ -124,70 +135,13 @@
     },
     data() {
       return {
-           tableData: [
-          {
-          id: '12987122',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'简单',
-          per:'45'
-        },
-         {
-          id: '12987123',
-          name: '排序问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'困难',
-          per:'45'
-
-        }, 
-        {
-          id: '12987125',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'中等',
-          per:'45'
-
-        }, 
-        {
-          id: '12987126',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'简单',
-          per:'45'
-
-        },
-         {
-          id: '12987123',
-          name: '排序问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'困难',
-          per:'45'
-
-        }, 
-        {
-          id: '12987125',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'中等',
-          per:'45'
-
-        }, 
-        {
-          id: '12987126',
-          name: '整数问题',
-          category: '给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。',
-          desc: '23',
-          degree:'简单',
-          per:'45'
-
-        }
-        ],
+          Cname:'',
+          Cdiff:'',
+          NumOfProblems:1,
+          pagesize:1,
+          currentPage:1,
+          problem_list:'',
+          tableData: [],
         activeIndex: '4',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/intro4.jpg") + ")",
@@ -196,6 +150,9 @@
       };
     },
     mounted(){
+      this.problem_list = this.$route.query.key;
+
+      this.handleproblemlist();
 
     },
     methods: {
@@ -210,14 +167,40 @@
         return 'background-color: rgba(227,227,227);color:black;font-weight: 600;height:60px;font-size;20px;'
       }
     },
-    handleExercise(key, keyPath) {
-        console.log(key, keyPath);
+    handleSelect(key, keyPath) {
         this.$router.push({
-          path: '/CContent',
+          path: '/EContent',
           query: {
             key
           }
         })
+      },
+      //分页
+      handleCurrentChange: function(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage); //点击第几页
+                this.handleproblemlist();
+      },
+      handleproblemlist() {
+        //问题列表
+        this.$axios({
+        method: 'get',
+        url: "/api/Contest/"+this.problem_list, 
+        // params:{
+        //   NumberOfPages:this.currentPage,
+        //   DataPerPage:this.pagesize
+        // },
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          // console.log(response.data);
+          // this.NumOfProblems = response.data.data.NumOfProblems;
+          this.Cname = response.data.data.title;
+          this.Cdiff = response.data.data.difficulty;
+          this.tableData =  response.data.Problem_list; // 成功的返回      
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+          
       }
   
 
@@ -272,9 +255,6 @@
     color: #2f2d2e;
     font-weight: 600;
     color: #c1c1c1;
-
-
-
   }
   
  .el-menu--horizontal>.el-submenu .el-submenu__title{
@@ -289,7 +269,7 @@
    .listcontent{
        width: 100%;
        position: absolute;
-       top:130px;
+       top:120px;
        bottom: 3em;
        left: 0;
        right: 0;
@@ -333,6 +313,16 @@ background-color: #212e3e !important;
   display: flex;
   justify-content: flex-end;
  
+
+}
+.descriptioncss{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p{
+    margin-right: 20px;
+    font-weight: 600;
+  }
 
 }
 

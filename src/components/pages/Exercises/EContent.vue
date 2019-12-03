@@ -6,7 +6,7 @@
 <div class="centerWidth" style="padding-top:35px;">
   <el-row>
      <el-col :span="22">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
           <el-menu-item index="1" style="height:70px;margin:0 10px;margin-left:100px;"><router-link to="/">Home</router-link></el-menu-item>
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
@@ -23,19 +23,20 @@
 <div class="listcontent">
     <div class="question">
           <div class="title">
-            <p>整数问题</p>
-            <p>难度：简单</p>
+            <p>{{ptitle}}</p>
+            <p>难度：{{pdifficulty}}</p>
 
         </div>
         <div class="content">
             <p class="weight">题目描述</p>
-            <p>给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。</p>
+            <p>{{description}}</p>
             <p class="weight">输入描述：</p>
-            <P>描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述</P>
+            <P>{{input_description}}</P>
             <p class="weight">输出描述：</p>
-            <p>描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
+            <p>{{output_description}}</p>
             <p class="weight">示例：</p>
-            <p>输入: 120 输出: 21</p>
+            <p>输入: {{pinput}}</p>
+            <P>输出: {{poutput}}</P>
         </div>
 
     </div>
@@ -121,6 +122,14 @@ require("codemirror/mode/python/python.js")
     },
     data() {
       return {
+      ptitle:'',
+      pdifficulty:'',
+      description:'',
+      input_description:'',
+      output_description:'',
+      pinput:'',
+      poutput:'',
+      problem_id:'',
       language:'python',
       theme:'base16-dark',
       result:false,
@@ -150,26 +159,43 @@ require("codemirror/mode/python/python.js")
       };
     },
     mounted(){
-
+      this.problem_id = this.$route.query.key;
+      this.handleproblem();
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
       openFullScreen(){
           this.result=true;
       },
       handleCommand1(command) {
         // this.cmOptions.theme = command;
         this.language = command;
-        
       },
       handleCommand2(command) {
         this.cmOptions.theme = command;
         this.theme = command;
-        
-      }
-  
+      },
+      handleproblem() {
+        //问题列表
+        this.$axios({
+        method: 'get',
+        url: "/api/Problem/"+this.problem_id, 
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          // console.log(response.data.data);
+          this.ptitle = response.data.data.title;
+          this.pdifficulty = response.data.data.difficulty;
+          this.description = response.data.data.description;
+          this.input_description = response.data.data.input_description;
+          this.output_description = response.data.data.output_description;
+          this.pinput = response.data.data.input;
+          this.poutput = response.data.data.output;
+
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+          
+     }
+
     }
   }
 </script>
