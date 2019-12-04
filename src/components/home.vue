@@ -16,7 +16,7 @@
      </el-menu>
     </el-col>
      <el-col :span="2">
-       <p style="color:white;"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
+       <p style="color:white;cursor:pointer;" @click="loginout"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
     </el-col>
   </el-row>
 </div>
@@ -95,6 +95,17 @@
     </div>
   </transition>
 
+  <el-dialog
+  title="Logout"
+  :visible.sync="dialogVisible"
+  width="30%">
+  <span>Confirm Logout?</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogout">Confirm</el-button>
+  </span>
+</el-dialog>
+
 
 <!-- <div class="centerWidth" style="position:absolute;width:70%;bottom:20px;">
   <div class="footer">
@@ -115,6 +126,7 @@
     },
     data() {
       return {
+        dialogVisible: false,
         loginname:'请登录',
         register: {
           name: '',
@@ -136,8 +148,15 @@
       };
     },
     mounted(){
-      // this.loginoj();
-
+      
+      // this.$cookies.remove("username");
+      console.log(this.$cookies.get('username'));
+      if(this.$cookies.get('username')==null){
+        this.loginname = '请登录';
+      }else{
+        this.loginname = this.$cookies.get('username');
+      }
+   
     },
     methods: {
       handleSelect(key, keyPath) {
@@ -165,15 +184,48 @@
                 type: 'success'
               });
               this.loginname = this.login.name;
+              this.$cookies.set('username',this.login.name);
               this.showLogin = false;
+               
           }else{
             this.$message.error('Login Error!');
           }
-
     
-             
         })
       .catch(error => console.log(error, "error")); // 失败的返回
+      },
+      loginout(){
+        if(this.$cookies.get('username')==null){
+              this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+        }else{
+          this.dialogVisible = true;
+        }
+      },
+      dialogout(){
+        this.$axios({
+        method: 'get',
+        url: "/api/Account/logout", 
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          console.log(response.data);
+          if(response.data.status == 0){
+            this.$cookies.remove("username");
+            this.loginname = '请登录';
+            this.dialogVisible = false;
+            this.$message({
+                message: 'Logout Succeeded!',
+                type: 'success'
+              });
+          }
+
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+
       }
     }
   }

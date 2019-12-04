@@ -16,6 +16,8 @@
      </el-menu>
     </el-col>
      <el-col :span="2">
+       <p style="color:white;cursor:pointer;" @click="loginout"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
+
     </el-col>
   </el-row>
 </div>
@@ -127,6 +129,7 @@
     },
     data() {
       return {
+          loginname:'',
           NumOfProblems:1,
           pagesize:5,
           currentPage:1,
@@ -140,7 +143,12 @@
     },
     mounted(){
       this.handleproblemlist();
-
+       console.log(this.$cookies.get('username'));
+        if(this.$cookies.get('username')==null){
+        this.loginname = '请登录';
+      }else{
+        this.loginname = this.$cookies.get('username');
+      }
     },
     methods: {
    
@@ -186,7 +194,21 @@
         })
       .catch(error => console.log(error, "error")); // 失败的返回
           
-     }
+     },
+      loginout(){
+        if(this.$cookies.get('username')==null){
+              this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+        }else{
+             this.$message({
+                message: 'Please Go Back To HomePage!',
+                type: 'warning'
+              });
+        }
+      },
   
 
     }
