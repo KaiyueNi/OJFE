@@ -32,6 +32,7 @@ Axios.defaults.headers.post['Content-Type'] = 'application/json';
 Axios.interceptors.request.use((req) => {
   if (req.method === 'post') {
    req.data = QS.stringify(req.data);
+   console.log(req.data);
   }
   return req;
 }, (error) => Promise.reject(error));

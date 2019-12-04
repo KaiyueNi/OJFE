@@ -16,6 +16,7 @@
      </el-menu>
     </el-col>
      <el-col :span="2">
+       <p style="color:white;"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
     </el-col>
   </el-row>
 </div>
@@ -89,7 +90,7 @@
        
         </el-form>
 
-        <el-button type="primary" @click="showLogin = false" style="width:22em;margin-bottom:1em;">Login</el-button>
+        <el-button type="primary" @click="loginoj" style="width:22em;margin-bottom:1em;">Login</el-button>
 
     </div>
   </transition>
@@ -114,6 +115,7 @@
     },
     data() {
       return {
+        loginname:'请登录',
         register: {
           name: '',
           password: '',
@@ -134,11 +136,44 @@
       };
     },
     mounted(){
+      // this.loginoj();
 
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      loginoj(){
+        this.$axios({
+        method: 'post',
+        url: "/api/Account/login", 
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data:{
+            username:this.login.name,
+            password:this.login.password
+        },
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          console.log(response.data);
+
+          if(response.data.status==0){
+                this.$message({
+                message: 'Login Succeeded!',
+                type: 'success'
+              });
+              this.loginname = this.login.name;
+              this.showLogin = false;
+          }else{
+            this.$message.error('Login Error!');
+          }
+
+    
+             
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
       }
     }
   }

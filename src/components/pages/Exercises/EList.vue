@@ -46,7 +46,7 @@
       prop="id">
         <template slot-scope="props">
         <i class="el-icon-s-order"></i>
-        <span style="margin-left: 10px">{{ props.row.id }}</span>
+        <span style="margin-left: 10px">{{ props.row.problem_id }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -128,7 +128,7 @@
     data() {
       return {
           NumOfProblems:1,
-          pagesize:1,
+          pagesize:5,
           currentPage:1,
           tableData: [],
         activeIndex: '3',
@@ -165,7 +165,7 @@
       //分页
       handleCurrentChange: function(currentPage){
                 this.currentPage = currentPage;
-                console.log(this.currentPage); //点击第几页
+                // console.log(this.currentPage); //点击第几页
                 this.handleproblemlist();
       },
       handleproblemlist() {
