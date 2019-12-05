@@ -21,9 +21,11 @@
   </el-row>
 </div>
 
-
+ <div style="display:flex;justify-content: flex-end;margin-bottom:20px;padding: 0 13em;">
+    <el-button type="primary" @click="watchdata">查看统计</el-button>
+    </div>
 <div class="listcontent">
-
+   
  
   <div class="tableli">
 
@@ -83,40 +85,6 @@
         <span style="margin-left: 10px">{{ props.row.statistic_info.result}}</span>
       </template>
     </el-table-column>
-<!--    
-    <el-table-column
-      label="难度">
-        <template slot-scope="props">
-          
-          <el-button
-          size="mini"
-          type="success"
-          v-if="props.row.difficulty == '简单'"
-         >{{ props.row.difficulty}}</el-button>
-          
-          <el-button
-          size="mini"
-          type="danger"
-          v-if="props.row.difficulty == '困难'"
-         >{{ props.row.difficulty}}</el-button>
-
-          <el-button
-          size="mini"
-          type="warning"
-          v-if="props.row.difficulty == '中等'"
-         >{{ props.row.difficulty}}</el-button>
-
-      </template>
-    </el-table-column> -->
-
-        <!-- <el-table-column label="操作">
-      <template slot-scope="props">
-        <el-button
-          size="mini"
-          type="primary"
-          @click="handleSelect(props.row.problem_id, props.row)">解题</el-button>
-      </template>
-    </el-table-column> -->
       
  
   </el-table>
@@ -136,7 +104,28 @@
 
 </div>
 
+<el-dialog
+  title="统计信息"
+  :visible.sync="centerDialogVisible"
+  width="45%"
+  center>
+  <div style="display:flex;">
 
+    <div id="main" style="width: 400px;height: 300px;"></div>
+    <div class="maintext">
+        <p>Accepted:</p>
+        <span>{{Accepted}}</span>
+        <p>Failed:</p>
+        <span>{{Failed}}</span>
+    </div>
+  </div>
+
+
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
 
 
 </div>
@@ -144,13 +133,23 @@
 </template>
 
 <script>
+  import echarts from 'echarts'
   export default {
-    name:'home',
+    name:'settings',
     components:{
 
     },
     data() {
       return {
+        Accepted:'0',
+        Failed:'0',
+        charts: '',
+        opinion:['accepted','failed'],
+        opinionData:[
+                  {value:0, name:'accepted'},
+                  {value:0, name:'failed'}
+        ],
+          centerDialogVisible: false,
           loginname:'',
           Cname:'',
           Cdiff:'',
@@ -200,6 +199,14 @@
 
     },
     methods: {
+        watchdata(){
+
+                this.centerDialogVisible = true;
+                    this.$nextTick(function() {
+                this.drawPie('main')
+            })
+
+        },
    
        // 修改table tr行的背景色
     tableRowStyle({ row, rowIndex }) {
@@ -211,14 +218,6 @@
         return 'background-color: rgba(227,227,227);color:black;font-weight: 600;height:60px;font-size;20px;'
       }
     },
-    handleSelect(key, keyPath) {
-        this.$router.push({
-          path: '/EContent',
-          query: {
-            key
-          }
-        })
-      },
       //分页
       handleCurrentChange: function(currentPage){
                 this.currentPage = currentPage;
@@ -233,10 +232,17 @@
           responseType: 'json'// 返回数据为json
         })
           .then(response => {
-            console.log(response.data.data);
+            // console.log(response.data.data);
+            this.opinionData = [
+                {value:response.data.data.accepted, name:'accepted'},
+                {value:response.data.data.failed, name:'failed'}
+
+            ];
+            this.Accepted = response.data.data.accepted;
+            this.Failed = response.data.data.failed;
             var recent_submission = response.data.data.recent_submission;
             this.tableData = recent_submission;
-            console.log(recent_submission);
+            // console.log(recent_submission);
 
              // 成功的返回      
           })
@@ -264,14 +270,81 @@
                 type: 'warning'
               });
         }
-      }
+      },
+          drawPie(id){
+               this.charts = echarts.init(document.getElementById(id))
+               this.charts.setOption({
+                 tooltip: {
+                   trigger: 'item',
+                   formatter: '{a}<br/>{b}:{c} ({d}%)'
+                 },
+                 legend: {
+                   orient: 'vertical',
+                   x: 'left',
+                   data:this.opinion
+                 },
+                 series: [
+                   {
+                     name:'统计',
+                     type:'pie',
+                     radius:['50%','70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                       normal: {
+                         show: false,
+                         position: 'center'
+                       },
+                       emphasis: {
+                         show: true,
+                         textStyle: {
+                           fontSize: '60',
+                           fontWeight: 'blod'
+                         }
+                       }
+                     },
+                     labelLine: {
+                       normal: {
+                         show: false
+                       }
+                     },
+                     data:this.opinionData,
+                                  itemStyle: {
+                            
+                                normal:{
+                                    color:function(params) {
+                                    //自定义颜色
+                                    var colorList = [          
+                                            '#409EFF', '#F56C6C'
+                                        ];
+                                        return colorList[params.dataIndex]
+                                     }
+                                }
+                          }
+                  
+
+                   }
+                 ]
+               })
+            }
+
   
 
-    }
+    },
+
+       
   }
 </script>
 <style lang="less" scoped>
-
+.maintext{
+    p{
+        font-weight: 600;
+        font-size: 18px;
+        margin: 10px 0;
+    }
+    span{
+        font-size: 18px;
+    }
+}
 
 .colorstyle{
   color: black;
@@ -337,9 +410,9 @@
        bottom: 3em;
        left: 0;
        right: 0;
-      //  display: flex;
-      //  flex-direction: column;
-      //  justify-content: center;
+    //    display: flex;
+    //    flex-direction: column;
+    //    justify-content: center;
        padding: 0 13em;
        box-sizing: border-box;
          overflow-y:scroll;
