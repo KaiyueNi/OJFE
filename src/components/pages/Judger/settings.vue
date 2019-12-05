@@ -17,51 +17,73 @@
     </el-col>
      <el-col :span="2">
        <p style="color:white;cursor:pointer;" @click="loginout"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
-
     </el-col>
   </el-row>
 </div>
 
-<div class="listcontent">
-  <div class="tableli">
 
+<div class="listcontent">
+
+ 
+  <div class="tableli">
 
     <el-table
     :data="tableData"
     :row-style="tableRowStyle"
     :header-cell-style="tableHeaderColor"
-      height="460"
     >
-    <!-- <el-table-column type="expand">
+    <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
      
-          <el-form-item label="题目描述">
-            <span>{{ props.row.category }}</span>
+          <el-form-item label="性能指标">
+            <span><span>memory:</span>{{ props.row.statistic_info.performanceindex.memory}}</span>
+            <span style="margin-left:10px;"><span>time:</span>{{ props.row.statistic_info.performanceindex.time}}</span>
+          </el-form-item>
+        
+          <el-form-item label="编译运行错误详细信息">
+
+            <span>compile:{{ props.row.statistic_info.errordetails.compile}}</span>
+            <span style="margin-left:10px;">runtime:{{ props.row.statistic_info.errordetails.runtime}}</span>
+
           </el-form-item>
      
         </el-form>
       </template>
-    </el-table-column> -->
+    </el-table-column>
+   
     <el-table-column
-      label="题目ID"
-      prop="id">
+      label="提交ID">
         <template slot-scope="props">
-        <i class="el-icon-s-order"></i>
-        <span style="margin-left: 10px">{{ props.row.problem_id }}</span>
+        <span>{{ props.row.id }}</span>
       </template>
     </el-table-column>
     <el-table-column
+      label="题目ID"
+      prop="problem_id">
+    </el-table-column>
+     <el-table-column
       label="题目名称"
       prop="title">
     </el-table-column>
     <el-table-column
-      label="通过次数/总提交次数">
+      label="所用语言"
+       prop="language">
+     
+    </el-table-column>
+    <el-table-column
+      label="判题状态">
         <template slot-scope="props">
-        <span style="margin-left: 10px">{{ props.row.accepted_number }}</span>
-        <span>/{{ props.row.submission_number }}</span>
+        <span style="margin-left: 10px">{{ props.row.statistic_info.solutionstate }}</span>
       </template>
     </el-table-column>
+    <el-table-column
+      label="运行结果">
+        <template slot-scope="props">
+        <span style="margin-left: 10px">{{ props.row.statistic_info.result}}</span>
+      </template>
+    </el-table-column>
+<!--    
     <el-table-column
       label="难度">
         <template slot-scope="props">
@@ -85,23 +107,23 @@
          >{{ props.row.difficulty}}</el-button>
 
       </template>
-    </el-table-column>
+    </el-table-column> -->
 
-        <el-table-column label="操作">
+        <!-- <el-table-column label="操作">
       <template slot-scope="props">
         <el-button
           size="mini"
           type="primary"
           @click="handleSelect(props.row.problem_id, props.row)">解题</el-button>
       </template>
-    </el-table-column>
+    </el-table-column> -->
       
  
   </el-table>
       
   </div>
 
-  <div class="block">
+  <!-- <div class="block">
   <el-pagination
             background
             layout="prev, pager, next"
@@ -110,7 +132,7 @@
             :page-size="pagesize" 
             :total="NumOfProblems">
   </el-pagination>
-  </div>
+  </div> -->
 
 </div>
 
@@ -130,11 +152,36 @@
     data() {
       return {
           loginname:'',
+          Cname:'',
+          Cdiff:'',
           NumOfProblems:1,
-          pagesize:5,
+          pagesize:1,
           currentPage:1,
-          tableData: [],
-        activeIndex: '3',
+          problem_list:'',
+          tableData: [
+              {
+              id:'请先登录',
+              problem_id:'',
+              language:'',
+              title:'',
+              statistic_info:{
+                  result:'',
+                  solutionstate:'',
+                  status:'',
+                  errordetails:{
+                      compile:'',
+                      runtime:''
+                  },
+                  performanceindex:{
+                      memory:'',
+                      time:''
+
+                  }
+                 
+              }
+             }
+          ],
+        activeIndex: '6',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/intro4.jpg") + ")",
         }
@@ -142,13 +189,15 @@
       };
     },
     mounted(){
+
       this.handleproblemlist();
-       console.log(this.$cookies.get('username'));
-        if(this.$cookies.get('username')==null){
+
+    if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
         this.loginname = this.$cookies.get('username');
       }
+
     },
     methods: {
    
@@ -173,29 +222,36 @@
       //分页
       handleCurrentChange: function(currentPage){
                 this.currentPage = currentPage;
-                // console.log(this.currentPage); //点击第几页
+                console.log(this.currentPage); //点击第几页
                 this.handleproblemlist();
       },
       handleproblemlist() {
-        //问题列表
-        this.$axios({
-        method: 'get',
-        url: "/api/Problem/", 
-        params:{
-          NumberOfPages:this.currentPage,
-          DataPerPage:this.pagesize
-        },
-        responseType: 'json'// 返回数据为json
-      })
-      .then(response => {
-          // console.log(response.data.data);
-          this.NumOfProblems = response.data.data.NumOfProblems;
-          this.tableData =  response.data.data.list; // 成功的返回      
+                 //公告列表
+          this.$axios({
+          method: 'get',
+          url: "/api/Account/stat", 
+          responseType: 'json'// 返回数据为json
         })
-      .catch(error => console.log(error, "error")); // 失败的返回
+          .then(response => {
+            console.log(response.data.data);
+            var recent_submission = response.data.data.recent_submission;
+            this.tableData = recent_submission;
+            console.log(recent_submission);
+
+             // 成功的返回      
+          })
+          .catch(error => {
+              console.log(error, "error");
+                this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+              
+              }); // 失败的返回
           
-     },
-      loginout(){
+      },
+    loginout(){
         if(this.$cookies.get('username')==null){
               this.$message({
                 message: 'Please Login!',
@@ -208,13 +264,14 @@
                 type: 'warning'
               });
         }
-      },
+      }
   
 
     }
   }
 </script>
 <style lang="less" scoped>
+
 
 .colorstyle{
   color: black;
@@ -262,9 +319,6 @@
     color: #2f2d2e;
     font-weight: 600;
     color: #c1c1c1;
-
-
-
   }
   
  .el-menu--horizontal>.el-submenu .el-submenu__title{
@@ -279,7 +333,7 @@
    .listcontent{
        width: 100%;
        position: absolute;
-       top:130px;
+       top:160px;
        bottom: 3em;
        left: 0;
        right: 0;
@@ -288,8 +342,8 @@
       //  justify-content: center;
        padding: 0 13em;
        box-sizing: border-box;
-      //    overflow-y:scroll;
-      //  &::-webkit-scrollbar {display:none}
+         overflow-y:scroll;
+       &::-webkit-scrollbar {display:none}
        .tableli{
          position: relative;
          height: 500px;
@@ -325,6 +379,30 @@ background-color: #212e3e !important;
  
 
 }
+.descriptioncss{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p{
+    margin-right: 20px;
+    font-weight: 600;
+  }
+
+}
+
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+    font-weight: 600;
+  }
 
 
 

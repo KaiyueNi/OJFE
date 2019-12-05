@@ -96,7 +96,33 @@ export default {
     getcode(){
       console.log(this.content);
       console.log(typeof(this.content));
-    }
+    },
+
+        getAlist(){
+               //公告列表
+          this.$axios({
+          method: 'get',
+          url: "/api/Account/stat", 
+          responseType: 'json'// 返回数据为json
+        })
+          .then(response => {
+            console.log(response.data.data);
+            var recent_submission = response.data.data.recent_submission;
+            console.log(recent_submission);
+
+             // 成功的返回      
+          })
+          .catch(error => {
+              console.log(error, "error");
+                this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+              
+              }); // 失败的返回
+
+      }
    
      
   }

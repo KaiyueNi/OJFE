@@ -11,11 +11,12 @@
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
           <el-menu-item index="4" style="height:70px;margin:0 10px;"><router-link to="/CAList">Competition</router-link></el-menu-item>
-          <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/nav">Community</router-link></el-menu-item>
-          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/nav">Settings</router-link></el-menu-item>
+          <!-- <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/">Community</router-link></el-menu-item> -->
+          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/Settings">Judger</router-link></el-menu-item>
      </el-menu>
     </el-col>
      <el-col :span="2">
+       <p style="color:white;cursor:pointer;" @click="loginout"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
     </el-col>
   </el-row>
 </div>
@@ -43,12 +44,6 @@
           </div>
 
 </div>
-
-
-
-
-
-
 </div>
 </div>
 </template>
@@ -61,6 +56,7 @@
     },
     data() {
       return {
+        loginname:'',
         NumOfProblems:1,
         pagesize:1,
         currentPage:1,
@@ -74,9 +70,29 @@
     },
     mounted(){
       this.handlecompetitionlist();
+      if(this.$cookies.get('username')==null){
+        this.loginname = '请登录';
+      }else{
+        this.loginname = this.$cookies.get('username');
+      }
 
     },
     methods: {
+        loginout(){
+
+        if(this.$cookies.get('username')==null){
+              this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+        }else{
+             this.$message({
+                message: 'Please Go Back To HomePage!',
+                type: 'warning'
+              });
+        }
+      },
       getContent(key){
           console.log(key);
           this.$router.push({

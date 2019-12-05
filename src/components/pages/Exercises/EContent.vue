@@ -11,8 +11,8 @@
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
           <el-menu-item index="4" style="height:70px;margin:0 10px;"><router-link to="/CAList">Competition</router-link></el-menu-item>
-          <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/nav">Community</router-link></el-menu-item>
-          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/nav">Settings</router-link></el-menu-item>
+          <!-- <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/">Community</router-link></el-menu-item> -->
+          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/Settings">Judger</router-link></el-menu-item>
      </el-menu>
     </el-col>
      <el-col :span="2">
@@ -49,10 +49,10 @@
                     {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="python">python</el-dropdown-item>
                     <el-dropdown-item command="c">c</el-dropdown-item>
                     <el-dropdown-item command="c++">c++</el-dropdown-item>
                     <el-dropdown-item command="java">java</el-dropdown-item>
+                    <el-dropdown-item command="python">python</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
           <p style="margin-left:10px;">主题：</p>
@@ -137,7 +137,8 @@ require("codemirror/mode/clike/clike.js")
       pinput:'',
       poutput:'',
       problem_id:'',
-      language:'python',
+      language:'java',
+      languageId:3,
       theme:'base16-dark',
       result:false,
       curCode:'',
@@ -168,7 +169,6 @@ require("codemirror/mode/clike/clike.js")
     mounted(){
       this.problem_id = this.$route.query.key;
       this.handleproblem();
-      // console.log(this.$cookies.get('username'));
         if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
@@ -229,25 +229,47 @@ require("codemirror/mode/clike/clike.js")
         },
         //发送代码
       openFullScreen(){
-        
-        this.params = JSON.stringify(
-          {
-            "problem": 1,
-             "contest": 2, 
-             "username": "admin", 
-             "code": "this is the code placer", 
-             "language": 1, 
-             "test":1
-             });
-       
-       console.log(JSON.stringify({'message': this.params }));
-        this.init();
-
+        if(this.$cookies.get('username')==null){
+                this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+        }else{
+           this.params = JSON.stringify(
+              {
+                "problem": this.problem_id,
+                "contest": -1, 
+                "username": this.loginname, 
+                "code": this.content, 
+                "language": this.languageId, 
+                "test":1
+                });
+          
+            this.init();
           // this.result=true;
+
+        }
+
       },
       handleCommand1(command) {
         // this.cmOptions.theme = command;
         this.language = command;
+        if(this.language == 'c'){
+          this.languageId = 1;
+
+        }else if(this.language == 'c++'){
+          this.languageId = 2;
+
+
+        }else if(this.language == 'java'){
+          this.languageId = 3;
+
+
+        }else{
+          this.languageId = 4;
+
+
+        }
       },
       handleCommand2(command) {
         this.cmOptions.theme = command;
@@ -261,7 +283,6 @@ require("codemirror/mode/clike/clike.js")
         responseType: 'json'// 返回数据为json
       })
       .then(response => {
-          // console.log(response.data.data);
           this.ptitle = response.data.data.title;
           this.pdifficulty = response.data.data.difficulty;
           this.description = response.data.data.description;

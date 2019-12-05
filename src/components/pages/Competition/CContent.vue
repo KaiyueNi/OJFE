@@ -11,11 +11,12 @@
           <el-menu-item index="2" style="height:70px;margin:0 10px;"><router-link to="/AList">Annoncement</router-link></el-menu-item>
           <el-menu-item index="3" style="height:70px;margin:0 10px;"><router-link to="/EList">Exercises</router-link></el-menu-item>
           <el-menu-item index="4" style="height:70px;margin:0 10px;"><router-link to="/CAList">Competition</router-link></el-menu-item>
-          <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/nav">Community</router-link></el-menu-item>
-          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/nav">Settings</router-link></el-menu-item>
+          <!-- <el-menu-item index="5" style="height:70px;margin:0 10px;"><router-link to="/nav">Community</router-link></el-menu-item> -->
+          <el-menu-item index="6" style="height:70px;margin:0 10px;"><router-link to="/nav">Judger</router-link></el-menu-item>
      </el-menu>
     </el-col>
      <el-col :span="2">
+       <p style="color:white;cursor:pointer;" @click="loginout"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
     </el-col>
   </el-row>
 </div>
@@ -31,9 +32,9 @@
             <p class="weight">题目描述</p>
             <p>给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。</p>
             <p class="weight">输入描述：</p>
-            <P>描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述</P>
+            <P>描述</P>
             <p class="weight">输出描述：</p>
-            <p>描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述</p>
+            <p>描述</p>
             <p class="weight">示例：</p>
             <p>输入: 120 输出: 21</p>
 
@@ -86,21 +87,9 @@
 
         </div>
 
-
- 
-
-
-
     </div>
 
-       
-
 </div>
-
-
-
-
-
 </div>
 </div>
 </template>
@@ -128,6 +117,7 @@ require('codemirror/addon/fold/comment-fold.js')
     },
     data() {
       return {
+       loginname:'',
       result:false,
       curCode:'',
       code:'',
@@ -155,7 +145,11 @@ require('codemirror/addon/fold/comment-fold.js')
       };
     },
     mounted(){
-
+   if(this.$cookies.get('username')==null){
+        this.loginname = '请登录';
+      }else{
+        this.loginname = this.$cookies.get('username');
+      }
     },
     methods: {
       handleSelect(key, keyPath) {
@@ -164,7 +158,21 @@ require('codemirror/addon/fold/comment-fold.js')
       openFullScreen(){
           this.result=true;
 
+      },
+      loginout(){
 
+        if(this.$cookies.get('username')==null){
+              this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+        }else{
+             this.$message({
+                message: 'Please Go Back To HomePage!',
+                type: 'warning'
+              });
+        }
       }
 
    

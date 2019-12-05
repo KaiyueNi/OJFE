@@ -8,9 +8,7 @@ import EContent from '@/components/pages/Exercises/EContent'
 import CAList from '@/components/pages/Competition/CAList'
 import CList from '@/components/pages/Competition/CList'
 import CContent from '@/components/pages/Competition/CContent'
-
-
-
+import Settings from '@/components/pages/Judger/Settings'
 
 
 Vue.use(Router)
@@ -52,7 +50,11 @@ export default new Router({
       path:'/CContent',
       name:'CContent',
       component:CContent
-
+    },
+    {
+      path:'/Settings',
+      name:'Settings',
+      component:Settings
     }
   ]
 })
