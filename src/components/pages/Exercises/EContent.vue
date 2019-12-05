@@ -16,6 +16,7 @@
      </el-menu>
     </el-col>
      <el-col :span="2">
+       <p style="color:white;cursor:pointer;" @click="loginout"><i class="el-icon-user" style="margin-right:10px;"></i>{{loginname}}</p>
     </el-col>
   </el-row>
 </div>
@@ -113,6 +114,8 @@ import "codemirror/theme/eclipse.css";  // 这里引入的是主题样式，根�
 import "codemirror/theme/idea.css";  // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
 require("codemirror/mode/javascript/javascript") // 这里引入的模式的js，根据设置的mode引入，一定要引入！！
 require("codemirror/mode/python/python.js")
+require("codemirror/mode/clike/clike.js")
+
 
   export default {
     name:'home',
@@ -122,6 +125,10 @@ require("codemirror/mode/python/python.js")
     },
     data() {
       return {
+      path:'ws://47.101.167.9:5000/ws/Submission/admin/',
+      socket:'',
+      params:'',
+      loginname:'',
       ptitle:'',
       pdifficulty:'',
       description:'',
@@ -161,10 +168,82 @@ require("codemirror/mode/python/python.js")
     mounted(){
       this.problem_id = this.$route.query.key;
       this.handleproblem();
+      // console.log(this.$cookies.get('username'));
+        if(this.$cookies.get('username')==null){
+        this.loginname = '请登录';
+      }else{
+        this.loginname = this.$cookies.get('username');
+      }
+
     },
     methods: {
+        init: function(){
+            if(typeof(WebSocket) === "undefined"){
+                this.$message({
+                message: '您的浏览器不支持socket!',
+                type: 'warning'
+              });
+            }else{
+                // 实例化socket
+                // this.path = this.path;
+
+                this.socket = new WebSocket(this.path);
+
+                // 监听socket连接
+                this.socket.onopen = this.open;
+                // 监听socket错误信息
+                this.socket.onerror = this.error;
+                //关闭连接
+                // this.socket.onclose = this.close;
+              
+                // 监听socket消息
+                this.socket.onmessage = this.getMessage;
+                this.socket.onclose = this.close;
+
+            
+            }
+      },
+        open: function () {
+            console.log("socket连接成功");
+            this.socket.send(
+              JSON.stringify({
+                 'message': this.params
+               })
+            );
+        },
+        error: function () {
+            console.log("连接错误");
+        },
+        getMessage: function (msg) {
+            console.log(msg.data);
+
+          
+          var coderesult = JSON.parse(msg.data);
+          var coderesultjson = JSON.parse(coderesult.message);
+
+            console.log(coderesult);
+        },
+        close: function () {
+          this.socket.close();
+            console.log("socket已经关闭");
+        },
+        //发送代码
       openFullScreen(){
-          this.result=true;
+        
+        this.params = JSON.stringify(
+          {
+            "problem": 1,
+             "contest": 2, 
+             "username": "admin", 
+             "code": "this is the code placer", 
+             "language": 1, 
+             "test":1
+             });
+       
+       console.log(JSON.stringify({'message': this.params }));
+        this.init();
+
+          // this.result=true;
       },
       handleCommand1(command) {
         // this.cmOptions.theme = command;
@@ -175,7 +254,7 @@ require("codemirror/mode/python/python.js")
         this.theme = command;
       },
       handleproblem() {
-        //问题列表
+        //问题内容
         this.$axios({
         method: 'get',
         url: "/api/Problem/"+this.problem_id, 
@@ -194,7 +273,27 @@ require("codemirror/mode/python/python.js")
         })
       .catch(error => console.log(error, "error")); // 失败的返回
           
-     }
+     },
+    loginout(){
+
+        if(this.$cookies.get('username')==null){
+              this.$message({
+                message: 'Please Login!',
+                type: 'warning'
+              });
+
+        }else{
+             this.$message({
+                message: 'Please Go Back To HomePage!',
+                type: 'warning'
+              });
+        }
+      },
+
+    },
+    destroyed(){
+       // 销毁监听
+      // this.socket = new WebSocket(this.path);
 
     }
   }
