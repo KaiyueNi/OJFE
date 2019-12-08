@@ -45,15 +45,14 @@
         
           <el-form-item label="编译运行错误详细信息">
 
-            <span>compile:{{ props.row.statistic_info.errordetails.compile}}</span>
-            <span style="margin-left:10px;">runtime:{{ props.row.statistic_info.errordetails.runtime}}</span>
+            <span>compile error:{{ props.row.statistic_info.errordetails.compile}}</span>
+            <span style="margin-left:10px;">runtime error:{{ props.row.statistic_info.errordetails.runtime}}</span>
 
           </el-form-item>
      
         </el-form>
       </template>
     </el-table-column>
-   
     <el-table-column
       label="提交ID">
         <template slot-scope="props">
@@ -71,7 +70,6 @@
     <el-table-column
       label="所用语言"
        prop="language">
-     
     </el-table-column>
     <el-table-column
       label="判题状态">
@@ -82,7 +80,9 @@
     <el-table-column
       label="运行结果">
         <template slot-scope="props">
-        <span style="margin-left: 10px">{{ props.row.statistic_info.result}}</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==0">success</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==-1">error</span>
+
       </template>
     </el-table-column>
       
@@ -159,12 +159,12 @@
           problem_list:'',
           tableData: [
               {
-              id:'请先登录',
+              id:'暂无数据',
               problem_id:'',
               language:'',
               title:'',
               statistic_info:{
-                  result:'',
+                  result:'暂无数据',
                   solutionstate:'',
                   status:'',
                   errordetails:{
@@ -202,7 +202,7 @@
         watchdata(){
 
                 this.centerDialogVisible = true;
-                    this.$nextTick(function() {
+                this.$nextTick(function() {
                 this.drawPie('main')
             })
 
@@ -232,7 +232,7 @@
           responseType: 'json'// 返回数据为json
         })
           .then(response => {
-            // console.log(response.data.data);
+            console.log(response.data.data);
             this.opinionData = [
                 {value:response.data.data.accepted, name:'accepted'},
                 {value:response.data.data.failed, name:'failed'}

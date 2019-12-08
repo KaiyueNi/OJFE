@@ -143,7 +143,6 @@
     },
     mounted(){
       this.handleproblemlist();
-       console.log(this.$cookies.get('username'));
         if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
@@ -208,7 +207,7 @@
                 type: 'warning'
               });
         }
-      },
+      }
   
 
     }

@@ -86,9 +86,8 @@
 
             <div class="vresult" v-if="result">
                 <p>结果：</p>
-                <p>success</p>
-                <el-button type="success"
-                >查看详情</el-button>
+                <p>{{resultcode}}</p>
+                <!-- <el-button type="success">查看详情</el-button> -->
             </div>
 
              <el-button type="danger"
@@ -126,6 +125,7 @@ require("codemirror/mode/clike/clike.js")
     data() {
       return {
       path:'ws://47.101.167.9:5000/ws/Submission/admin/',
+      resultcode:'判题中',
       socket:'',
       params:'',
       loginname:'',
@@ -215,13 +215,19 @@ require("codemirror/mode/clike/clike.js")
             console.log("连接错误");
         },
         getMessage: function (msg) {
-            console.log(msg.data);
-
           
           var coderesult = JSON.parse(msg.data);
-          var coderesultjson = JSON.parse(coderesult.message);
-
             console.log(coderesult);
+
+          var resultcode = coderesult.message.result;
+          if(resultcode == 0){
+            resultcode = "success";
+
+          }else{
+            resultcode = "error";
+          }
+          this.resultcode = resultcode;
+
         },
         close: function () {
           this.socket.close();
@@ -229,6 +235,8 @@ require("codemirror/mode/clike/clike.js")
         },
         //发送代码
       openFullScreen(){
+        this.result=true;
+        this.resultcode = '判题中';
         if(this.$cookies.get('username')==null){
                 this.$message({
                 message: 'Please Login!',
@@ -238,11 +246,11 @@ require("codemirror/mode/clike/clike.js")
            this.params = JSON.stringify(
               {
                 "problem": this.problem_id,
-                "contest": -1, 
+                "contest": 2, 
                 "username": this.loginname, 
                 "code": this.content, 
-                "language": this.languageId, 
-                "test":1
+                "language": this.language, 
+                "test":0
                 });
           
             this.init();

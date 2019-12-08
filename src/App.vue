@@ -44,6 +44,8 @@ margin-top: 20px;
 .el-table__empty-text{
   font-size: 20px;
   color:black;
-
 }
+ .el-menu--horizontal{
+      border-bottom: none!important;
+    }
 </style>

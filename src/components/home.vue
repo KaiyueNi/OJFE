@@ -57,12 +57,12 @@
         <el-form-item label="Password">
             <el-input v-model="register.password"></el-input>
         </el-form-item>
-        <el-form-item label="Confirm">
-            <el-input v-model="register.cpassword"></el-input>
+        <el-form-item label="Email">
+            <el-input v-model="register.Email"></el-input>
         </el-form-item>
         </el-form>
 
-        <el-button type="success" @click="showModal = false" style="width:22em;margin-bottom:1em;">Register</el-button>
+        <el-button type="success" @click="registerConfirm" style="width:22em;margin-bottom:1em;">Register</el-button>
 
     </div>
   </transition>
@@ -131,7 +131,7 @@
         register: {
           name: '',
           password: '',
-          cpassword: ''
+          Email: ''
         },
         login: {
           name: '',
@@ -150,7 +150,7 @@
     mounted(){
       
       // this.$cookies.remove("username");
-      console.log(this.$cookies.get('username'));
+      // console.log(this.$cookies.get('username'));
       if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
@@ -161,6 +161,44 @@
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      registerConfirm(){
+        this.showModal = false;
+
+        this.$axios({
+        method: 'post',
+        url: "/api/Account/register", 
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data:{
+            username:this.register.name,
+            password:this.register.password,
+            email:this.register.Email
+        },
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          console.log(response.data);
+
+          // if(response.data.status==0){
+          //       this.$message({
+          //       message: 'Login Succeeded!',
+          //       type: 'success'
+          //     });
+          //     this.loginname = this.login.name;
+          //     this.$cookies.set('username',this.login.name);
+          //     this.showLogin = false;
+               
+          // }else{
+          //   this.$message.error('Login Error!');
+          // }
+    
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+
+
+
       },
       loginoj(){
         this.$axios({

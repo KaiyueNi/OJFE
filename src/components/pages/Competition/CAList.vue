@@ -60,7 +60,9 @@
         NumOfProblems:1,
         pagesize:1,
         currentPage:1,
-        list:[],
+        list:[
+          {title:'暂无数据...'}
+        ],
         activeIndex: '4',
         note:{
           backgroundImage: "url(" + require("../../../../static/img/banner.jpg") + ")",

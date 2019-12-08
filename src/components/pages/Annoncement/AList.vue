@@ -25,7 +25,7 @@
           <ul class="list">
             <li v-for="item in list" :key="item.id">
               <i class="el-icon-s-flag"></i>
-              <p @click="getContent(item.id)">{{item.title}}</p>
+              <p @click="getContent(item.content)">{{item.title}}</p>
               <!-- <p>{{item.time}}</p> -->
               <p>{{item.author}}</p>
               
@@ -76,7 +76,7 @@
     data() {
       return {
         loginname:'',
-        acontent:'',
+        acontent:'服务器维护中，暂无数据',
         list:[
           {
             id:0,
@@ -122,6 +122,7 @@
         console.log(key, keyPath);
       },
     getContent(key){
+      console.log(key);
      
       //公告详情
       this.$axios({
@@ -130,7 +131,7 @@
       responseType: 'json'// 返回数据为json
     })
       .then(response => {
-        // console.log(response.data.data);
+        console.log(response.data.data);
         this.acontent = response.data.data[0].content_text;
       })
       .catch(error => console.log(error, "error")); // 失败的返回
@@ -145,7 +146,7 @@
           responseType: 'json'// 返回数据为json
         })
           .then(response => {
-            // console.log(response.data.data);
+            console.log(response.data.data);
             this.list =  response.data.data; // 成功的返回      
           })
           .catch(error => console.log(error, "error")); // 失败的返回

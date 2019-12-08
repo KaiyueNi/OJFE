@@ -134,8 +134,8 @@
     data() {
       return {
         loginname:'',
-          Cname:'',
-          Cdiff:'',
+          Cname:'暂无比赛',
+          Cdiff:'暂无',
           NumOfProblems:1,
           pagesize:1,
           currentPage:1,
