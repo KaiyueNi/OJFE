@@ -9,6 +9,7 @@ import CAList from '@/components/pages/Competition/CAList'
 import CList from '@/components/pages/Competition/CList'
 import CContent from '@/components/pages/Competition/CContent'
 import Settings from '@/components/pages/Judger/Settings'
+import Community from '@/components/pages/Community/Community'
 
 
 Vue.use(Router)
@@ -55,6 +56,11 @@ export default new Router({
       path:'/Settings',
       name:'Settings',
       component:Settings
+    },
+    {
+      path:'/Community',
+      name:'Community',
+      component:Community
     }
   ]
 })
