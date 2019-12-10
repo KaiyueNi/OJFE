@@ -32,7 +32,9 @@
                 <span class="author-time">{{item.time}}</span>
             </div>
             <div class="icon-btn">
-                <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont el-icon-s-comment"></i>{{item.commentNum}}</span>
+                <!-- <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont el-icon-s-comment"></i>{{item.commentNum}}</span> -->
+                <span @click="showReplyInput(i,item.name,item.id)"><i class="iconfont el-icon-s-comment"></i></span>
+
                 <!-- <i class="iconfont el-icon-caret-top"></i>{{item.like}} -->
             </div>
             <div class="talk-box">
@@ -50,7 +52,9 @@
                         <span class="author-time">{{reply.time}}</span>
                     </div>
                     <div class="icon-btn">
-                        <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont el-icon-s-comment"></i>{{reply.commentNum}}</span>
+                        <!-- <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont el-icon-s-comment"></i>{{reply.commentNum}}</span> -->
+                        <span @click="showReplyInput(i,reply.from,reply.id)"><i class="iconfont el-icon-s-comment"></i></span>
+
                         <!-- <i class="iconfont el-icon-caret-top"></i>{{reply.like}} -->
                     </div>
                     <div class="talk-box">
@@ -116,39 +120,39 @@ export default {
             btnShow: false,
             index:'0',
             replyComment:'',
-            myName:'Lana Del Rey',
+            myName:'admin',
             myHeader:'',
             myId:19870621,
             to:'',
             toId:-1,
             comments:[
                 {
-                    name:'Lana Del Rey',
+                    name:'admin',
                     id:19870621,
                     headImg:'',
-                    comment:'我发布一张新专辑Norman Fucking Rockwell,大家快来听啊',
-                    time:'2019年9月16日 18:43',
+                    comment:'我的代码出bug了，谁来帮帮我？',
+                    time:'2019年11月16日 18:43',
                     commentNum:2,
                     inputShow:false,
                     reply:[
                         {
-                            from:'Taylor Swift',
+                            from:'user',
                             fromId:19891221,
                             fromHeadImg:'',
-                            to:'Lana Del Rey',
+                            to:'admin',
                             toId:19870621,
-                            comment:'我很喜欢你的新专辑！！',
-                            time:'2019年9月16日 18:43',
+                            comment:'哪一题？',
+                            time:'2019年11月16日 18:56',
                             commentNum:0,
                             inputShow:false
                         },
                         {
-                            from:'Ariana Grande',
+                            from:'user2',
                             fromId:1123,
                             fromHeadImg:'',
-                            to:'Lana Del Rey',
+                            to:'admin',
                             toId:19870621,
-                            comment:'别忘记宣传我们的合作单曲啊',
+                            comment:'我可以看看你的代码吗？',
                             time:'2019年12月10日 12:43',
                             commentNum:0,
                             inputShow:false
@@ -157,22 +161,22 @@ export default {
                     ]
                 },
                 {
-                    name:'Taylor Swift',
+                    name:'admin',
                     id:19891221,
                     headImg:'',
-                    comment:'我发行了我的新专辑Lover',
-                    time:'2019年9月16日 18:43',
+                    comment:'求题目5解法',
+                    time:'2019年11月16日 18:47',
                     commentNum:1,
                     inputShow:false,
                     reply:[
                         {
-                            from:'Lana Del Rey',
+                            from:'user',
                             fromId:19870621,
                             fromHeadImg:'',
-                            to:'Taylor Swift',
+                            to:'admin',
                             toId:19891221,
-                            comment:'新专辑和speak now 一样棒！',
-                            time:'2019年9月16日 18:43',
+                            comment:'同求',
+                            time:'2019年11月16日 19:33',
                             commentNum:0,
                             inputShow:false
 
@@ -180,11 +184,11 @@ export default {
                     ]
                 },
                 {
-                    name:'Norman Fucking Rockwell',
+                    name:'user',
                     id:20190830,
                     headImg:'',
-                    comment:'Plz buy Norman Fucking Rockwell on everywhere',
-                    time:'2019年9月16日 18:43',
+                    comment:'求一起刷题的小伙伴',
+                    time:'2019年12月10日 10:43',
                     commentNum:0,
                     like:5,
                     inputShow:false,
