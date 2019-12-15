@@ -99,7 +99,7 @@
         <el-button
           size="mini"
           type="primary"
-          @click="handleSelect(props.row.problem_id, props.row)">解题</el-button>
+          @click="handleSelect(props.row.id, props.row)">解题</el-button>
       </template>
     </el-table-column>
       
@@ -174,7 +174,7 @@
     },
     handleSelect(key, keyPath) {
         this.$router.push({
-          path: '/EContent',
+          path: '/CContent',
           query: {
             key
           }
@@ -198,7 +198,7 @@
         responseType: 'json'// 返回数据为json
       })
       .then(response => {
-          // console.log(response.data);
+          console.log(response.data);
           // this.NumOfProblems = response.data.data.NumOfProblems;
           this.Cname = response.data.data.title;
           this.Cdiff = response.data.data.difficulty;

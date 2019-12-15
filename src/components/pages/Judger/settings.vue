@@ -39,15 +39,18 @@
         <el-form label-position="left" inline class="demo-table-expand">
      
           <el-form-item label="性能指标">
-            <span><span>memory:</span>{{ props.row.statistic_info.performanceindex.memory}}</span>
-            <span style="margin-left:10px;"><span>time:</span>{{ props.row.statistic_info.performanceindex.time}}</span>
+            <span v-if="props.row.statistic_info.performanceindex.memory!=''"><span style="color:black;">memory:</span>{{props.row.statistic_info.performanceindex.memory}}</span>
+            <span v-if="props.row.statistic_info.performanceindex.memory==''"><span style="color:black;">memory:</span>暂无数据</span>
+            <span v-if="props.row.statistic_info.performanceindex.time!=''" style="margin-left:10px;"><span style="color:black;">time:</span>{{props.row.statistic_info.performanceindex.time}}</span>
+            <span v-if="props.row.statistic_info.performanceindex.time==''" style="margin-left:10px;"><span style="color:black;">time:</span>暂无数据</span>
           </el-form-item>
         
           <el-form-item label="编译运行错误详细信息">
 
-            <span>compile error:{{ props.row.statistic_info.errordetails.compile}}</span>
-            <span style="margin-left:10px;">runtime error:{{ props.row.statistic_info.errordetails.runtime}}</span>
-
+            <span v-if="props.row.statistic_info.errordetails.compile==''"><span style="color:black;">compile error:</span>暂无数据</span>
+            <span v-if="props.row.statistic_info.errordetails.compile!=''"><span style="color:black;">compile error:</span>{{props.row.statistic_info.errordetails.compile}}</span>
+            <span style="margin-left:10px;" v-if="props.row.statistic_info.errordetails.runtime==''"><span style="color:black;">runtime error:</span>暂无数据</span>
+            <span style="margin-left:10px;" v-if="props.row.statistic_info.errordetails.runtime!=''"><span style="color:black;">runtime error:</span>{{props.row.statistic_info.errordetails.runtime}}</span>
           </el-form-item>
      
         </el-form>
@@ -80,9 +83,14 @@
     <el-table-column
       label="运行结果">
         <template slot-scope="props">
-        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==0">success</span>
-        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==-1">error</span>
-
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==0">SUCCESS</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==-1">WRONG_ANSWER</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==1">CPU_TIME_LIMIT_EXCEEDED</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==2">REAL_TIME_LIMIT_EXCEEDED</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==3">MEMORY_LIMIT_EXCEEDED</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==4">RUNTIME_ERROR</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==5">SYSTEM_ERROR</span>
+        <span style="margin-left: 10px" v-if="props.row.statistic_info.result==6">COMPILE_ERROR</span>
       </template>
     </el-table-column>
       

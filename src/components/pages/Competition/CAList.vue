@@ -27,7 +27,7 @@
               <i class="el-icon-trophy-1"></i>
               <p @click="getContent(item.id)">{{item.title}}</p>
               <p>{{item.created_time}}</p>
-              <p>{{item.created_by}}</p>
+              <!-- <p>{{item.created_by}}</p> -->
               
             </li>
 

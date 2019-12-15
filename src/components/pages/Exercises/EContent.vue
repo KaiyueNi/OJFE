@@ -249,7 +249,7 @@ require("codemirror/mode/clike/clike.js")
                 "contest": 2, 
                 "username": this.loginname, 
                 "code": this.content, 
-                "language": this.language, 
+                "language": this.languageId, 
                 "test":0
                 });
           
