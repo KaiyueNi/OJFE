@@ -52,7 +52,7 @@
                     <el-dropdown-item command="c">c</el-dropdown-item>
                     <el-dropdown-item command="c++">c++</el-dropdown-item>
                     <el-dropdown-item command="java">java</el-dropdown-item>
-                    <el-dropdown-item command="python">python</el-dropdown-item>
+                    <!-- <el-dropdown-item command="python">python</el-dropdown-item> -->
                 </el-dropdown-menu>
             </el-dropdown>
           <p style="margin-left:10px;">主题：</p>
@@ -246,7 +246,7 @@ require("codemirror/mode/clike/clike.js")
            this.params = JSON.stringify(
               {
                 "problem": this.problem_id,
-                "contest": 2, 
+                "contest": 1, 
                 "username": this.loginname, 
                 "code": this.content, 
                 "language": this.languageId, 
@@ -272,10 +272,8 @@ require("codemirror/mode/clike/clike.js")
         }else if(this.language == 'java'){
           this.languageId = 3;
 
-
         }else{
           this.languageId = 4;
-
 
         }
       },

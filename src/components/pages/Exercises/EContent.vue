@@ -52,7 +52,7 @@
                     <el-dropdown-item command="c">c</el-dropdown-item>
                     <el-dropdown-item command="c++">c++</el-dropdown-item>
                     <el-dropdown-item command="java">java</el-dropdown-item>
-                    <el-dropdown-item command="python">python</el-dropdown-item>
+                    <!-- <el-dropdown-item command="python">python</el-dropdown-item> -->
                 </el-dropdown-menu>
             </el-dropdown>
           <p style="margin-left:10px;">主题：</p>
@@ -264,19 +264,12 @@ require("codemirror/mode/clike/clike.js")
         this.language = command;
         if(this.language == 'c'){
           this.languageId = 1;
-
         }else if(this.language == 'c++'){
           this.languageId = 2;
-
-
         }else if(this.language == 'java'){
           this.languageId = 3;
-
-
         }else{
           this.languageId = 4;
-
-
         }
       },
       handleCommand2(command) {
