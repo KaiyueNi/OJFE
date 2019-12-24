@@ -38,19 +38,23 @@
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
      
-          <el-form-item label="性能指标">
+          <el-form-item>
+          <p style="font-size:18px;color:black;font-family:SimHei;">性能指标：</p>
+
             <span v-if="props.row.statistic_info.performanceindex.memory!=''"><span style="color:black;">memory:</span>{{props.row.statistic_info.performanceindex.memory}}</span>
             <span v-if="props.row.statistic_info.performanceindex.memory==''"><span style="color:black;">memory:</span>暂无数据</span>
-            <span v-if="props.row.statistic_info.performanceindex.time!=''" style="margin-left:10px;"><span style="color:black;">time:</span>{{props.row.statistic_info.performanceindex.time}}</span>
-            <span v-if="props.row.statistic_info.performanceindex.time==''" style="margin-left:10px;"><span style="color:black;">time:</span>暂无数据</span>
+            <br>
+            <span v-if="props.row.statistic_info.performanceindex.time!=''"><span style="color:black;">time:</span>{{props.row.statistic_info.performanceindex.time}}</span>
+            <span v-if="props.row.statistic_info.performanceindex.time==''"><span style="color:black;">time:</span>暂无数据</span>
           </el-form-item>
         
-          <el-form-item label="编译运行错误详细信息">
-
+          <el-form-item>
+          <p style="font-size:18px;color:black;font-family:SimHei;">编译运行错误详细信息：</p>
             <span v-if="props.row.statistic_info.errordetails.compile==''"><span style="color:black;">compile error:</span>暂无数据</span>
             <span v-if="props.row.statistic_info.errordetails.compile!=''"><span style="color:black;">compile error:</span>{{props.row.statistic_info.errordetails.compile}}</span>
-            <span style="margin-left:10px;" v-if="props.row.statistic_info.errordetails.runtime==''"><span style="color:black;">runtime error:</span>暂无数据</span>
-            <span style="margin-left:10px;" v-if="props.row.statistic_info.errordetails.runtime!=''"><span style="color:black;">runtime error:</span>{{props.row.statistic_info.errordetails.runtime}}</span>
+            <br>
+            <span v-if="props.row.statistic_info.errordetails.runtime==''"><span style="color:black;">runtime error:</span>暂无数据</span>
+            <span v-if="props.row.statistic_info.errordetails.runtime!=''"><span style="color:black;">runtime error:</span>{{props.row.statistic_info.errordetails.runtime}}</span>
           </el-form-item>
      
         </el-form>
@@ -134,7 +138,16 @@
     <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
   </span>
 </el-dialog>
-
+  <el-dialog
+  title="Logout"
+  :visible.sync="dialogVisible"
+  width="30%">
+  <span>Confirm Logout?</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogout">Confirm</el-button>
+  </span>
+</el-dialog>
 
 </div>
 </div>
@@ -149,9 +162,11 @@
     },
     data() {
       return {
+        dialogVisible:false,
         Accepted:'0',
         Failed:'0',
         charts: '',
+        user:'',
         opinion:['accepted','failed'],
         opinionData:[
                   {value:0, name:'accepted'},
@@ -197,13 +212,15 @@
     },
     mounted(){
 
-      this.handleproblemlist();
-
     if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
         this.loginname = this.$cookies.get('username');
+        this.user = this.$cookies.get('username');
+
       }
+      this.handleproblemlist();
+
 
     },
     methods: {
@@ -233,7 +250,6 @@
                 this.handleproblemlist();
       },
       handleproblemlist() {
-                 //公告列表
           this.$axios({
           method: 'get',
           url: "/api/Account/stat", 
@@ -256,16 +272,17 @@
           })
           .catch(error => {
               console.log(error, "error");
-                this.$message({
-                message: 'Please Login!',
-                type: 'warning'
-              });
+              //   this.$message({
+              //   message: 'Error!',
+              //   type: 'warning'
+              // });
 
               
               }); // 失败的返回
           
       },
-    loginout(){
+            loginout(){
+
         if(this.$cookies.get('username')==null){
               this.$message({
                 message: 'Please Login!',
@@ -273,11 +290,30 @@
               });
 
         }else{
-             this.$message({
-                message: 'Please Go Back To HomePage!',
-                type: 'warning'
-              });
+          this.dialogVisible = true;
         }
+      },
+      dialogout(){
+        this.$axios({
+        method: 'get',
+        url: "/api/Account/logout", 
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          console.log(response.data);
+          if(response.data.status == 0){
+            this.$cookies.remove("username");
+            this.loginname = '请登录';
+            this.dialogVisible = false;
+            this.$message({
+                message: 'Logout Succeeded!',
+                type: 'success'
+              });
+          }
+
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+
       },
           drawPie(id){
                this.charts = echarts.init(document.getElementById(id))

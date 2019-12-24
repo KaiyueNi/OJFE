@@ -63,6 +63,17 @@
     </div>
   </transition>
 
+    <el-dialog
+  title="Logout"
+  :visible.sync="dialogVisible"
+  width="30%">
+  <span>Confirm Logout?</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogout">Confirm</el-button>
+  </span>
+</el-dialog>
+
 </div>
 </div>
 </template>
@@ -75,6 +86,7 @@
     },
     data() {
       return {
+        dialogVisible:false,
         loginname:'',
         acontent:'服务器维护中，暂无数据',
         list:[
@@ -112,11 +124,34 @@
               });
 
         }else{
-             this.$message({
-                message: 'Please Go Back To HomePage!',
-                type: 'warning'
-              });
+          this.dialogVisible = true;
+            //  this.$message({
+            //     message: 'Please Go Back To HomePage!',
+            //     type: 'warning'
+            //   });
         }
+      },
+           dialogout(){
+        this.$axios({
+        method: 'get',
+        url: "/api/Account/logout", 
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          console.log(response.data);
+          if(response.data.status == 0){
+            this.$cookies.remove("username");
+            this.loginname = '请登录';
+            this.dialogVisible = false;
+            this.$message({
+                message: 'Logout Succeeded!',
+                type: 'success'
+              });
+          }
+
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+
       },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);

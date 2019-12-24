@@ -55,7 +55,7 @@
             <el-input v-model="register.name"></el-input>
         </el-form-item>
         <el-form-item label="Password">
-            <el-input v-model="register.password"></el-input>
+            <el-input v-model="register.password" show-password></el-input>
         </el-form-item>
         <el-form-item label="Email">
             <el-input v-model="register.Email"></el-input>
@@ -85,7 +85,7 @@
             <el-input v-model="login.name"></el-input>
         </el-form-item>
         <el-form-item label="Password">
-            <el-input v-model="login.password"></el-input>
+            <el-input v-model="login.password" show-password></el-input>
         </el-form-item>
        
         </el-form>
@@ -148,9 +148,7 @@
       };
     },
     mounted(){
-      
-      // this.$cookies.remove("username");
-      // console.log(this.$cookies.get('username'));
+    
       if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
@@ -163,6 +161,16 @@
         console.log(key, keyPath);
       },
       registerConfirm(){
+        if(this.register.name==''||this.register.password==''||this.register.Email==''){
+          this.$message.error('Incomplete information!');
+        }else{
+
+           var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+           if(!regEmail.test(this.register.Email)){
+            this.$message.error('Error Email!');
+
+           }else{
+
         this.showModal = false;
 
         this.$axios({
@@ -181,26 +189,29 @@
       .then(response => {
           console.log(response.data);
 
-          // if(response.data.status==0){
-          //       this.$message({
-          //       message: 'Login Succeeded!',
-          //       type: 'success'
-          //     });
-          //     this.loginname = this.login.name;
-          //     this.$cookies.set('username',this.login.name);
-          //     this.showLogin = false;
+          if(response.data.error_code==0){
+                this.$message({
+                message: 'Register Succeeded!',
+                type: 'success'
+              });
                
-          // }else{
-          //   this.$message.error('Login Error!');
-          // }
+          }else{
+            this.$message.error('Register Error!');
+          }
     
         })
       .catch(error => console.log(error, "error")); // 失败的返回
 
+        }
+      }
 
 
       },
       loginoj(){
+        if(this.login.name==''||this.login.password==''){
+            this.$message.error('Incomplete information!');
+        }else{
+
         this.$axios({
         method: 'post',
         url: "/api/Account/login", 
@@ -230,8 +241,10 @@
           }
     
         })
-      .catch(error => console.log(error, "error")); // 失败的返回
+      .catch(error => console.log(error, "error")); 
+      }// 失败的返回
       },
+
       loginout(){
         if(this.$cookies.get('username')==null){
               this.$message({

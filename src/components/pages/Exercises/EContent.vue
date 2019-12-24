@@ -99,7 +99,16 @@
     </div>
 
 </div>
-
+  <el-dialog
+  title="Logout"
+  :visible.sync="dialogVisible"
+  width="30%">
+  <span>Confirm Logout?</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogout">Confirm</el-button>
+  </span>
+</el-dialog>
 </div>
 </div>
 </template>
@@ -124,6 +133,7 @@ require("codemirror/mode/clike/clike.js")
     },
     data() {
       return {
+      dialogVisible:false,
       path:'ws://47.101.167.9:5000/ws/Submission/admin/',
       resultcode:'判题中',
       socket:'',
@@ -169,11 +179,12 @@ require("codemirror/mode/clike/clike.js")
     mounted(){
       this.problem_id = this.$route.query.key;
       this.handleproblem();
-        if(this.$cookies.get('username')==null){
+      if(this.$cookies.get('username')==null){
         this.loginname = '请登录';
       }else{
         this.loginname = this.$cookies.get('username');
       }
+      console.log(this.$cookies.get('username'));
 
     },
     methods: {
@@ -235,14 +246,15 @@ require("codemirror/mode/clike/clike.js")
         },
         //发送代码
       openFullScreen(){
-        this.result=true;
-        this.resultcode = '判题中';
+      
         if(this.$cookies.get('username')==null){
                 this.$message({
                 message: 'Please Login!',
                 type: 'warning'
               });
         }else{
+            this.result=true;
+        this.resultcode = '判题中';
            this.params = JSON.stringify(
               {
                 "problem": this.problem_id,
@@ -260,7 +272,6 @@ require("codemirror/mode/clike/clike.js")
 
       },
       handleCommand1(command) {
-        // this.cmOptions.theme = command;
         this.language = command;
         if(this.language == 'c'){
           this.languageId = 1;
@@ -296,7 +307,7 @@ require("codemirror/mode/clike/clike.js")
       .catch(error => console.log(error, "error")); // 失败的返回
           
      },
-    loginout(){
+          loginout(){
 
         if(this.$cookies.get('username')==null){
               this.$message({
@@ -305,12 +316,31 @@ require("codemirror/mode/clike/clike.js")
               });
 
         }else{
-             this.$message({
-                message: 'Please Go Back To HomePage!',
-                type: 'warning'
-              });
+          this.dialogVisible = true;
         }
       },
+      dialogout(){
+        this.$axios({
+        method: 'get',
+        url: "/api/Account/logout", 
+        responseType: 'json'// 返回数据为json
+      })
+      .then(response => {
+          console.log(response.data);
+          if(response.data.status == 0){
+            this.$cookies.remove("username");
+            this.loginname = '请登录';
+            this.dialogVisible = false;
+            this.$message({
+                message: 'Logout Succeeded!',
+                type: 'success'
+              });
+          }
+
+        })
+      .catch(error => console.log(error, "error")); // 失败的返回
+
+      }
 
     },
     destroyed(){
