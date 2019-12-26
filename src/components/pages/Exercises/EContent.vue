@@ -184,7 +184,6 @@ require("codemirror/mode/clike/clike.js")
       }else{
         this.loginname = this.$cookies.get('username');
       }
-      console.log(this.$cookies.get('username'));
 
     },
     methods: {
